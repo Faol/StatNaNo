@@ -107,3 +107,5 @@ testscripte/
 #pycharm ide
 .idea/
 *.DS_Store
+/JsonDateien/
+/QtUis/
