@@ -1,4 +1,7 @@
 import requests
+from urllib3.exceptions import NewConnectionError
+from requests.exceptions import ConnectionError
+
 from core import exceptions
 import json
 
@@ -12,27 +15,31 @@ class NanoApi(object):
     # ---------------------------------------------------------------
     def sign_in(self, username, password):
         sign_in = {"identifier": username, "password": password}
-        response = requests.post("https://api.nanowrimo.org/users/sign_in", json=sign_in)
-        if response:
-            msg = "Login successful"
-            print(msg)
-            self.auth = {"Authorization": response.json()["auth_token"]}
-            return True, msg
-        elif response.status_code == 401:
-            msg = "Wrong username/password. Try again."
-            print(msg)
-            return False,msg
-        elif response.status_code == 404:
-            msg = "Login page not found! Please contact me!"
-            print(msg)
-            return False, msg
-        else:
-            msg = "Error: Please try again later! (Status Code:" + response.status_code + ")"
-            print(msg)
-            return False, msg
+        try:
+            response = requests.post("https://api.nanowrimo.org/users/sign_in", json=sign_in)
+            if response:
+                msg = "Login successful"
+                #print(msg)
+                self.auth = {"Authorization": response.json()["auth_token"]}
+                return True, msg,0
+            elif response.status_code == 401:
+                msg = "Wrong username/password. Try again."
+                #print(msg)
+                return False,msg,1
+            elif response.status_code == 404:
+                msg = "Login page not found! Please contact me!"
+                print(msg)
+                return False, msg,2
+            else:
+                msg = "Error: Please try again later! (Status Code:" + str(response.status_code) + ")"
+                #print(msg)
+                return False, msg,2
+        except ConnectionError:
+            msg="No internet connection. Try again."
+            return False,msg,1
 
     # setzt auth
-    def log_out(self):
+    def logout(self):
         self.auth = None
 
     def getId(self, nanoNick):
