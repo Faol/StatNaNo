@@ -24,7 +24,7 @@ class Ui_MainWindow(object):
         # Login Aktion
         self.login_action = QAction(QIcon("Resources/Symbols/lock-unlock.png"), "Login", self)
         self.login_action.setCheckable(False)
-        self.login_action.triggered.connect(login.my_costum_fn)
+        self.login_action.triggered.connect(login.open_login_dialog)
         self.login_action.setShortcut(QKeySequence(Qt.CTRL + Qt.Key_L))
         toolbar.addAction(self.login_action)
 
@@ -33,7 +33,7 @@ class Ui_MainWindow(object):
         my_button_action2 = QAction(QIcon("disk--plus.png"), "Mein zweiter Button", self)
         my_button_action2.setStatusTip("Das ist mein bloeder Button")
         my_button_action2.setCheckable(True)
-        my_button_action2.triggered.connect(login.my_costum_fn)
+        my_button_action2.triggered.connect(login.open_login_dialog)
 
 
         # erstellt Statusbar in einer Zeile, auch zweizeilig ware moeglich

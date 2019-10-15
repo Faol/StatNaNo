@@ -8,43 +8,59 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtWidgets import QLineEdit, QDialogButtonBox
+from PyQt5.QtWidgets import QLineEdit, QDialogButtonBox, QCheckBox, QMessageBox
+
+from core import login
+from core.c_settings import settings
 
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
+        # Einstellungen Dialogbox
         Dialog.setObjectName("Login-Dialog")
         Dialog.setWindowModality(QtCore.Qt.ApplicationModal)
         Dialog.resize(366, 233)
         Dialog.setAutoFillBackground(False)
         Dialog.setModal(True)
+        #Einstellungen allgemeines Layout
         self.formLayout = QtWidgets.QFormLayout(Dialog)
         self.formLayout.setObjectName("formLayout")
         self.verticalLayout = QtWidgets.QVBoxLayout()
         self.verticalLayout.setObjectName("verticalLayout")
+        #Beschreibender Text
         self.label = QtWidgets.QLabel(Dialog)
         self.label.setObjectName("label")
         self.verticalLayout.addWidget(self.label)
         spacerItem = QtWidgets.QSpacerItem(20, 5, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
         self.verticalLayout.addItem(spacerItem)
+        #Benutzernamen Eingabefeld
         self.lineEdit = QtWidgets.QLineEdit(Dialog)
         self.lineEdit.setFrame(True)
         self.lineEdit.setObjectName("username")
+        if settings.saveLogin:
+            self.lineEdit.setText(settings.benutzername)
         self.verticalLayout.addWidget(self.lineEdit)
+        #Passwort-Eingabefeld
         self.lineEdit_2 = QtWidgets.QLineEdit(Dialog)
-        self.lineEdit_2.setInputMask("")
         self.lineEdit_2.setEchoMode(QtWidgets.QLineEdit.Password)
         self.lineEdit_2.setAlignment(QtCore.Qt.AlignLeading|QtCore.Qt.AlignLeft|QtCore.Qt.AlignVCenter)
         self.lineEdit_2.setClearButtonEnabled(False)
+        if settings.saveLogin:
+            self.lineEdit_2.setText(settings.password)
         self.lineEdit_2.setObjectName("password")
         self.verticalLayout.addWidget(self.lineEdit_2)
+        #Logindaten speichern Checkbox
         self.checkBox = QtWidgets.QCheckBox(Dialog)
+        self.checkBox.setChecked(settings.saveLogin)
         self.checkBox.setObjectName("saveLogin")
         self.verticalLayout.addWidget(self.checkBox)
+        #Autologin checkbox
         self.checkBox_2 = QtWidgets.QCheckBox(Dialog)
+        self.checkBox_2.setChecked(settings.autoLogin)
         self.checkBox_2.setObjectName("autoLogin")
         self.verticalLayout.addWidget(self.checkBox_2)
         self.formLayout.setLayout(0, QtWidgets.QFormLayout.LabelRole, self.verticalLayout)
+        #Cancel und Login-Button
         self.buttonBox = QtWidgets.QDialogButtonBox(Dialog)
         self.buttonBox.setOrientation(QtCore.Qt.Horizontal)
         self.buttonBox.setStandardButtons(QtWidgets.QDialogButtonBox.Cancel|QtWidgets.QDialogButtonBox.Ok)
@@ -70,3 +86,30 @@ class Ui_Dialog(object):
         return self.findChild(QLineEdit, "username").text()
     def get_password(self):
         return self.findChild(QLineEdit, "password").text()
+    def getSaveLoginState(self):
+        return self.findChild(QCheckBox,"saveLogin").isChecked()
+    def getAutoLoginState(self):
+        return self.findChild(QCheckBox,"autoLogin").isChecked()
+
+
+def loginErrorMessageRetry(msg):
+    msgBox=QMessageBox()
+    msgBox.setIcon(QMessageBox.Critical)
+    msgBox.setWindowTitle("Login Error")
+    msgBox.setText(msg)
+    msgBox.setStandardButtons(QMessageBox.Retry | QMessageBox.Cancel)
+    msgBox.setDefaultButton(QMessageBox.Retry)
+    msgBox.setEscapeButton(QMessageBox.Cancel)
+    msgBox.accepted.connect(login.retry_login_dialog)
+    msgBox.rejected.connect(lambda: None)
+    msgBox.exec_()
+def loginErrorMessage(msg):
+    msgBox=QMessageBox()
+    msgBox.setIcon(QMessageBox.Critical)
+    msgBox.setWindowTitle("Login Error")
+    msgBox.setText(msg)
+    msgBox.setStandardButtons(QMessageBox.Ok)
+    msgBox.setDefaultButton(QMessageBox.Ok)
+    msgBox.setEscapeButton(QMessageBox.Ok)
+    msgBox.accepted.connect(lambda: None)
+    msgBox.exec_()
