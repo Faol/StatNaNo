@@ -14,7 +14,7 @@ from core import login
 from core.c_settings import settings
 
 
-class Ui_Dialog(object):
+class Ui_LoginDialog(object):
     def setupUi(self, Dialog):
         # Einstellungen Dialogbox
         Dialog.setObjectName("Login-Dialog")
@@ -91,25 +91,27 @@ class Ui_Dialog(object):
     def getAutoLoginState(self):
         return self.findChild(QCheckBox,"autoLogin").isChecked()
 
+    @staticmethod
+    def loginErrorMessageRetry(msg):
+        msgBox=QMessageBox()
+        msgBox.setIcon(QMessageBox.Critical)
+        msgBox.setWindowTitle("Login Error")
+        msgBox.setText(msg)
+        msgBox.setStandardButtons(QMessageBox.Retry | QMessageBox.Cancel)
+        msgBox.setDefaultButton(QMessageBox.Retry)
+        msgBox.setEscapeButton(QMessageBox.Cancel)
+        msgBox.accepted.connect(login.retry_login_dialog)
+        msgBox.rejected.connect(lambda: None)
+        msgBox.exec_()
 
-def loginErrorMessageRetry(msg):
-    msgBox=QMessageBox()
-    msgBox.setIcon(QMessageBox.Critical)
-    msgBox.setWindowTitle("Login Error")
-    msgBox.setText(msg)
-    msgBox.setStandardButtons(QMessageBox.Retry | QMessageBox.Cancel)
-    msgBox.setDefaultButton(QMessageBox.Retry)
-    msgBox.setEscapeButton(QMessageBox.Cancel)
-    msgBox.accepted.connect(login.retry_login_dialog)
-    msgBox.rejected.connect(lambda: None)
-    msgBox.exec_()
-def loginErrorMessage(msg):
-    msgBox=QMessageBox()
-    msgBox.setIcon(QMessageBox.Critical)
-    msgBox.setWindowTitle("Login Error")
-    msgBox.setText(msg)
-    msgBox.setStandardButtons(QMessageBox.Ok)
-    msgBox.setDefaultButton(QMessageBox.Ok)
-    msgBox.setEscapeButton(QMessageBox.Ok)
-    msgBox.accepted.connect(lambda: None)
-    msgBox.exec_()
+    @staticmethod
+    def loginErrorMessage(msg):
+        msgBox=QMessageBox()
+        msgBox.setIcon(QMessageBox.Critical)
+        msgBox.setWindowTitle("Login Error")
+        msgBox.setText(msg)
+        msgBox.setStandardButtons(QMessageBox.Ok)
+        msgBox.setDefaultButton(QMessageBox.Ok)
+        msgBox.setEscapeButton(QMessageBox.Ok)
+        msgBox.accepted.connect(lambda: None)
+        msgBox.exec_()

@@ -2,10 +2,10 @@ from PyQt5.QtWidgets import QDialog
 
 from core.c_settings import settings
 from uis import ui_login_dialog
-from uis.ui_login_dialog import Ui_Dialog
+from uis.ui_login_dialog import Ui_LoginDialog
 from core import c_nanoAPI as nanoApi
 
-class Login_dialog(QDialog,Ui_Dialog):
+class Login_dialog(QDialog, Ui_LoginDialog):
     def __init__(self,*args,**kwargs):
         super(Login_dialog,self).__init__(*args,**kwargs)
         self.setupUi(self)
@@ -26,9 +26,9 @@ def open_login_dialog(s):
             print(nanoApi.api.auth)
         else:
             if errorCode==1:
-                ui_login_dialog.loginErrorMessageRetry(msg)
+                Ui_LoginDialog.loginErrorMessageRetry(msg)
             else:
-                ui_login_dialog.loginErrorMessage(msg)
+                Ui_LoginDialog.loginErrorMessage(msg)
     else:
         pass
 
