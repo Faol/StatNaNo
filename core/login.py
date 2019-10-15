@@ -34,3 +34,7 @@ def open_login_dialog(s):
 
 def retry_login_dialog():
     open_login_dialog(True)
+
+def logout(s):
+    nanoApi.api.logout()
+    print(nanoApi.api.auth)

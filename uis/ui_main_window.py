@@ -30,10 +30,10 @@ class Ui_MainWindow(object):
 
         # andere Aktion
         #TODO durch sinnvolle Aktionen ersetzten
-        my_button_action2 = QAction(QIcon("disk--plus.png"), "Mein zweiter Button", self)
-        my_button_action2.setStatusTip("Das ist mein bloeder Button")
-        my_button_action2.setCheckable(True)
-        my_button_action2.triggered.connect(login.open_login_dialog)
+        self.logout_action = QAction(QIcon("Resources/Symbols/lock.png"), "Logout", self)
+        self.logout_action.setCheckable(False)
+        self.logout_action.triggered.connect(login.logout)
+        toolbar.addAction(self.logout_action)
 
 
         # erstellt Statusbar in einer Zeile, auch zweizeilig ware moeglich
@@ -45,10 +45,11 @@ class Ui_MainWindow(object):
         #Hauptmenu
         main_menu = menu.addMenu("NaNoStatistics")
         main_menu.addAction(self.login_action)
+        main_menu.addAction(self.logout_action)
         main_menu.addSeparator()
         #TODO: submenu durch sinnvolles Menu ersetzen oder loeschen
         file_submenu = main_menu.addMenu("Submenu")
-        file_submenu.addAction(my_button_action2)
+        file_submenu.addAction(self.logout_action)
 
         self.retranslateUi(mainWindow)
 
@@ -59,3 +60,5 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow","NaNo Statistik"))
         self.login_action.setStatusTip(_translate("MainWindow","In Nano Seite einloggen."))
         self.login_action.setText(_translate("MainWindow","Login"))
+        self.logout_action.setStatusTip(_translate("MainWindow","In Nano Seite ausloggen."))
+        self.logout_action.setText(_translate("MainWindow", "Logout"))

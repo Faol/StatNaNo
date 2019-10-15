@@ -19,12 +19,12 @@ class NanoApi(object):
             response = requests.post("https://api.nanowrimo.org/users/sign_in", json=sign_in)
             if response:
                 msg = "Login successful"
-                print(msg)
+                #print(msg)
                 self.auth = {"Authorization": response.json()["auth_token"]}
                 return True, msg,0
             elif response.status_code == 401:
                 msg = "Wrong username/password. Try again."
-                print(msg)
+                #print(msg)
                 return False,msg,1
             elif response.status_code == 404:
                 msg = "Login page not found! Please contact me!"
@@ -32,14 +32,14 @@ class NanoApi(object):
                 return False, msg,2
             else:
                 msg = "Error: Please try again later! (Status Code:" + str(response.status_code) + ")"
-                print(msg)
+                #print(msg)
                 return False, msg,2
         except ConnectionError:
             msg="No internet connection. Try again."
             return False,msg,1
 
     # setzt auth
-    def log_out(self):
+    def logout(self):
         self.auth = None
 
     def getId(self, nanoNick):
