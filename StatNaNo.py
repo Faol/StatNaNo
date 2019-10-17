@@ -8,7 +8,7 @@ import sys
 from core import exceptions, c_nanoAPI as nanoApi
 from core.c_person import PersonManager
 from uis.ui_main_window import Ui_MainWindow
-
+from core.c_settings import settings
 #--------------------------------
 # bei Programmstart
 #--------------------------------

@@ -109,3 +109,4 @@ testscripte/
 *.DS_Store
 /JsonDateien/
 /QtUis/
+/settings.json

@@ -22,6 +22,7 @@ def open_login_dialog(s):
             settings.benutzername =None
             settings.password =None
         settings.autoLogin=dlg.getAutoLoginState()
+        settings.saveSettings()
         if successful:
             print(nanoApi.api.auth)
         else:
